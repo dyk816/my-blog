@@ -34,13 +34,14 @@ layout: null
       overflow-x: hidden;
     }
 
+    /* 제목 네모 박스 */
     .title-box {
       background-color: #fffb8f;
       border: 8px solid #0000ff;
       box-shadow: 10px 10px 0px #ff00ff;
       padding: 20px 50px;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 35px;
       animation: bounce 1.5s infinite alternate;
     }
 
@@ -51,26 +52,29 @@ layout: null
       letter-spacing: 5px;
     }
 
+    /* 메인 3분할 레이아웃 */
     .main-container {
       display: flex;
       justify-content: space-around;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
-      max-width: 1100px;
+      max-width: 1150px;
       gap: 20px;
       flex-wrap: wrap;
     }
 
+    /* 좌측: 즐겁다! 말풍선 */
     .bubble-wrapper {
       flex: 1;
-      min-width: 260px;
+      min-width: 250px;
       display: flex;
       justify-content: center;
+      padding-top: 20px;
     }
 
     .shout-bubble {
-      width: 250px;
-      height: 250px;
+      width: 240px;
+      height: 240px;
       background: #ffeb3b;
       clip-path: polygon(
         50% 0%, 63% 18%, 82% 10%, 78% 30%, 98% 35%, 
@@ -92,27 +96,34 @@ layout: null
     }
 
     .shout-bubble span {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       font-weight: 900;
       color: #ff0000;
       text-shadow: 2px 2px 0px #ffffff, -2px -2px 0px #ffffff, 2px -2px 0px #ffffff, -2px 2px 0px #ffffff;
     }
 
-    .post-list-box {
-      flex: 1.2;
-      min-width: 300px;
-      background: rgba(255, 255, 255, 0.9);
+    /* 중앙: 포스트 및 카테고리 영역 */
+    .center-content-box {
+      flex: 1.4;
+      min-width: 320px;
+      background: rgba(255, 255, 255, 0.95);
       border: 5px dashed #ff0080;
       border-radius: 15px;
       padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .post-list-box h2 {
-      text-align: center;
-      margin-bottom: 15px;
+    /* 최근 목록 섹션 */
+    .section-title {
       color: #008000;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
+      border-bottom: 3px solid #ffcc00;
+      padding-bottom: 5px;
+      margin-bottom: 12px;
+      text-align: center;
     }
 
     .post-list {
@@ -120,14 +131,15 @@ layout: null
       padding-left: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .post-list li a {
       color: #0000cc;
       font-weight: bold;
       text-decoration: underline;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      word-break: break-all;
     }
 
     .post-list li a:hover {
@@ -135,17 +147,76 @@ layout: null
       background-color: yellow;
     }
 
+    .empty-notice {
+      color: #888;
+      font-size: 0.95rem;
+      text-align: center;
+      list-style: none;
+    }
+
+    /* 카테고리 2분할 영역 */
+    .category-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 5px;
+    }
+
+    .category-card {
+      background: #f0faff;
+      border: 3px solid #00c3ff;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .category-card.daily {
+      background: #fff0f5;
+      border-color: #ff69b4;
+    }
+
+    .category-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #0044ff;
+    }
+
+    .category-card.daily h3 {
+      color: #d10068;
+    }
+
+    .category-list {
+      list-style-type: '📌 ';
+      padding-left: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .category-list li a {
+      color: #222;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .category-list li a:hover {
+      text-decoration: underline;
+      color: #ff0000;
+    }
+
+    /* 우측: CSS 보노보노 */
     .bonobono-wrapper {
       flex: 1;
       min-width: 250px;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-top: 20px;
     }
 
     .bono-head {
-      width: 200px;
-      height: 190px;
+      width: 190px;
+      height: 180px;
       background-color: #5bc4f5;
       border: 4px solid #000;
       border-radius: 50% 50% 45% 45%;
@@ -158,14 +229,14 @@ layout: null
       background-color: #000;
       border-radius: 50%;
       position: absolute;
-      top: 75px;
+      top: 70px;
     }
-    .bono-eye.left { left: 40px; }
-    .bono-eye.right { right: 40px; }
+    .bono-eye.left { left: 38px; }
+    .bono-eye.right { right: 38px; }
 
     .bono-muzzle-wrap {
       position: absolute;
-      top: 75px;
+      top: 70px;
       left: 50%;
       transform: translateX(-50%);
       width: 90px;
@@ -212,10 +283,10 @@ layout: null
 
     .bono-sweat {
       position: absolute;
-      top: 25px;
-      right: 25px;
-      width: 20px;
-      height: 25px;
+      top: 22px;
+      right: 22px;
+      width: 18px;
+      height: 23px;
       background-color: #ffffff;
       border: 2px solid #000;
       border-radius: 0% 100% 50% 50% / 0% 50% 50% 100%;
@@ -226,6 +297,12 @@ layout: null
       0% { transform: translateY(0); }
       100% { transform: translateY(-10px); }
     }
+
+    @media (max-width: 600px) {
+      .category-container {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -235,21 +312,63 @@ layout: null
   </div>
 
   <div class="main-container">
+    <!-- 좌측: 즐겁다! 말풍선 -->
     <div class="bubble-wrapper">
       <div class="shout-bubble">
         <span>즐겁다!</span>
       </div>
     </div>
 
-    <div class="post-list-box">
-      <h2>🔥 최근 일기 목록</h2>
-      <ul class="post-list">
-        {% for post in site.posts %}
-          <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-        {% endfor %}
-      </ul>
+    <!-- 중앙: 최근 일기 (3개) & 카테고리 분류 -->
+    <div class="center-content-box">
+      <!-- 1. 최근 일기 목록 (최대 3개) -->
+      <div>
+        <h2 class="section-title">🔥 최근 일기 (최신 3개)</h2>
+        <ul class="post-list">
+          {% for post in site.posts limit:3 %}
+            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+          {% else %}
+            <li class="empty-notice">등록된 글이 없습니다.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- 2. 카테고리 영역 (부트캠프 / 일상) -->
+      <div>
+        <h2 class="section-title">📂 카테고리별 일기</h2>
+        <div class="category-container">
+          
+          <!-- 부트캠프 카테고리 -->
+          <div class="category-card">
+            <h3>💻 부트캠프</h3>
+            <ul class="category-list">
+              {% assign boot_posts = site.categories['부트캠프'] %}
+              {% for post in boot_posts limit:5 %}
+                <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+              {% else %}
+                <li class="empty-notice">글이 없습니다.</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- 일상 카테고리 -->
+          <div class="category-card daily">
+            <h3>☕ 일상</h3>
+            <ul class="category-list">
+              {% assign daily_posts = site.categories['일상'] %}
+              {% for post in daily_posts limit:5 %}
+                <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+              {% else %}
+                <li class="empty-notice">글이 없습니다.</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+        </div>
+      </div>
     </div>
 
+    <!-- 우측: 보노보노 -->
     <div class="bonobono-wrapper">
       <div class="bono-head">
         <div class="bono-sweat"></div>

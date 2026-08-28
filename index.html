@@ -1,527 +1,250 @@
----
-layout: null
----
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>부트캠프 일기</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>내 개발 블로그</title>
   <style>
-    :root {
-      --glass-bg: rgba(255, 255, 255, 0.22);
-      --glass-border: rgba(255, 255, 255, 0.45);
-      --glass-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.18);
-      --glass-blur: blur(16px);
-      --text-main: #1e293b;
-      --text-sub: #475569;
-    }
-
+    /* 기본 스타일 리셋 및 설정 */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
-      min-height: 100vh;
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      overflow-x: hidden;
-      position: relative;
-      background: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
     }
 
-    /* 리퀴드 오로라/무지개 배경 애니메이션 */
-    .liquid-background {
+    /* 1. 상단 고정 헤더 바 (초기에는 숨김) */
+    .sticky-header {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      overflow: hidden;
-      filter: blur(80px);
-    }
-
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: float 14s infinite ease-in-out alternate;
-    }
-
-    .blob-1 {
-      width: 500px;
-      height: 500px;
-      background: linear-gradient(135deg, #ff4e50, #f9d423);
-      top: -10%;
-      left: -10%;
-    }
-
-    .blob-2 {
-      width: 600px;
-      height: 600px;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      top: 20%;
-      right: -15%;
-      animation-delay: -3s;
-      animation-duration: 18s;
-    }
-
-    .blob-3 {
-      width: 450px;
-      height: 450px;
-      background: linear-gradient(135deg, #b06ab3, #4568dc);
-      bottom: -10%;
-      left: 20%;
-      animation-delay: -6s;
-    }
-
-    .blob-4 {
-      width: 350px;
-      height: 350px;
-      background: linear-gradient(135deg, #11998e, #38ef7d);
-      bottom: 20%;
-      right: 30%;
-      animation-delay: -9s;
-    }
-
-    @keyframes float {
-      0% { transform: translate(0px, 0px) scale(1); }
-      50% { transform: translate(60px, 40px) scale(1.1); }
-      100% { transform: translate(-40px, 80px) scale(0.95); }
-    }
-
-    /* 글래스 박스 공통 속성 */
-    .glass-card {
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: 24px;
-    }
-
-    /* 제목 네모 상자 (리퀴드 글래스 스타일) */
-    .title-box {
-      padding: 18px 45px;
-      text-align: center;
-      margin-bottom: 35px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .title-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -50%;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(
-        60deg,
-        transparent,
-        rgba(255, 255, 255, 0.4),
-        transparent
-      );
-      transform: rotate(30deg);
-      animation: shine 6s infinite ease-in-out;
-    }
-
-    .title-box h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 30%, #e2e8f0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
-
-    /* 메인 3단 레이아웃 */
-    .main-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       width: 100%;
-      max-width: 1200px;
-      gap: 25px;
-      flex-wrap: wrap;
-    }
-
-    /* 좌측: 글래스 스타일 뾰족 말풍선 (즐겁다!) */
-    .bubble-wrapper {
-      flex: 1;
-      min-width: 260px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .shout-bubble {
-      width: 250px;
-      height: 250px;
-      background: linear-gradient(135deg, rgba(255, 235, 59, 0.55), rgba(255, 152, 0, 0.45));
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      clip-path: polygon(
-        50% 0%, 63% 18%, 82% 10%, 78% 30%, 98% 35%, 
-        85% 50%, 100% 70%, 78% 75%, 80% 95%, 
-        60% 85%, 50% 100%, 40% 85%, 20% 95%, 
-        22% 75%, 0% 70%, 15% 50%, 2% 35%, 
-        22% 30%, 18% 10%, 37% 18%
-      );
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(255, 193, 7, 0.3);
-      transform: rotate(-8deg);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: pointer;
-    }
-
-    .shout-bubble:hover {
-      transform: scale(1.08) rotate(4deg);
-    }
-
-    .shout-bubble span {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: #ffffff;
-      text-shadow: 0 2px 10px rgba(220, 38, 38, 0.5), 0 0 20px rgba(255, 255, 255, 0.8);
-      letter-spacing: -1px;
-    }
-
-    /* 중앙: 포스트 & 카테고리 글래스 카드 */
-    .center-content-box {
-      flex: 1.5;
-      min-width: 320px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .section-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #ffffff;
+      height: 60px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
+      padding: 0 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      z-index: 1000;
+      
+      /* 숨김 효과 (위로 살짝 올라가며 투명해짐) */
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: all 0.3s ease-in-out;
     }
 
-    .post-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .post-list li a {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: rgba(255, 255, 255, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 14px;
-      color: #0f172a;
-      font-weight: 600;
-      font-size: 0.98rem;
-      text-decoration: none;
-      transition: all 0.25s ease;
-    }
-
-    .post-list li a:hover {
-      background: rgba(255, 255, 255, 0.45);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      color: #000000;
-    }
-
-    .post-list li a::after {
-      content: '→';
-      opacity: 0.5;
-      transition: transform 0.2s;
-    }
-
-    .post-list li a:hover::after {
+    /* 스크롤 시 추가될 active 클래스 */
+    .sticky-header.active {
       opacity: 1;
-      transform: translateX(4px);
+      transform: translateY(0);
     }
 
-    .empty-notice {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
-      padding: 10px;
+    .sticky-header h2 {
+      font-size: 1.1rem;
+      color: #212529;
+    }
+
+    /* 2. 블로그 타이틀 영역 (헤더) */
+    .blog-header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px 40px 20px;
       text-align: center;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
     }
-
-    /* 카테고리 2단 영역 */
-    .category-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .category-card {
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 16px;
-      padding: 14px;
-    }
-
-    .category-card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #ffffff;
+    .blog-header h1 {
+      font-size: 2.5rem;
       margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      color: #111;
+    }
+    .blog-header p {
+      font-size: 1.1rem;
+      color: #6c757d;
     }
 
+    /* 3. 메인 컨텐츠 레이아웃 (좌/우 분할) */
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 30px;
+    }
+
+    /* 좌측 3/4: 전체글 목록 */
+    .main-content {
+      flex: 3; /* 75% 비율 */
+    }
+    .post-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #e9ecef;
+    }
+    .post-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: #212529;
+    }
+    .post-card p {
+      color: #495057;
+      margin-bottom: 12px;
+    }
+    .post-card .date {
+      font-size: 0.85rem;
+      color: #868e96;
+    }
+
+    /* 우측 1/4: 카테고리 사이드바 */
+    .sidebar {
+      flex: 1; /* 25% 비율 */
+      height: fit-content;
+      position: sticky;
+      top: 80px; /* 상단 바가 생겨도 안 가려지도록 위치 지정 */
+    }
+    .category-box {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    .category-box h3 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #212529;
+    }
     .category-list {
       list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
     }
-
-    .category-list li a {
-      display: block;
-      color: #1e293b;
-      font-size: 0.88rem;
-      font-weight: 600;
+    .category-list li {
+      margin-bottom: 10px;
+    }
+    .category-list a {
       text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 8px;
-      transition: background 0.2s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .category-list li a:hover {
-      background: rgba(255, 255, 255, 0.35);
-      color: #000;
-    }
-
-    /* 우측: 글래스 프레임 안의 모던 보노보노 */
-    .bonobono-wrapper {
-      flex: 1;
-      min-width: 260px;
+      color: #495057;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: space-content;
+      transition: color 0.2s;
+    }
+    .category-list a:hover,
+    .category-list a.active {
+      color: #007bff;
+      font-weight: bold;
     }
 
-    .bono-frame {
-      padding: 25px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .bono-head {
-      width: 170px;
-      height: 165px;
-      background: linear-gradient(145deg, #6fd5ff, #38a5e8);
-      border-radius: 50% 50% 45% 45%;
-      position: relative;
-      box-shadow: 0 10px 25px rgba(56, 165, 232, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .bono-eye {
-      width: 6px;
-      height: 10px;
-      background-color: #1e293b;
-      border-radius: 50%;
-      position: absolute;
-      top: 65px;
-    }
-    .bono-eye.left { left: 36px; }
-    .bono-eye.right { right: 36px; }
-
-    .bono-muzzle-wrap {
-      position: absolute;
-      top: 62px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 60px;
-    }
-
-    .bono-nose {
-      width: 20px;
-      height: 24px;
-      background-color: #0f172a;
-      border-radius: 50%;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
-    }
-
-    .bono-mouth {
-      width: 28px;
-      height: 36px;
-      background: linear-gradient(to bottom, #ef4444, #b91c1c);
-      border-radius: 50%;
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-    }
-
-    .bono-cheek {
-      width: 40px;
-      height: 36px;
-      background-color: #ffffff;
-      border-radius: 50%;
-      position: absolute;
-      top: 8px;
-      z-index: 2;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .bono-cheek.left { left: 3px; }
-    .bono-cheek.right { right: 3px; }
-
-    .bono-sweat {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 16px;
-      height: 20px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(200,235,255,0.7));
-      backdrop-filter: blur(4px);
-      border-radius: 0% 100% 50% 50% / 0% 50% 50% 100%;
-      transform: rotate(45deg);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    @keyframes shine {
-      0% { transform: translateX(-100%) rotate(30deg); }
-      20%, 100% { transform: translateX(100%) rotate(30deg); }
-    }
-
-    @media (max-width: 650px) {
-      .category-container {
-        grid-template-columns: 1fr;
+    /* 모바일 대응 (화면이 작아지면 세로로 배치) */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column-reverse; /* 카테고리를 위로 올리려면 column으로 변경 가능 */
       }
-      .title-box h1 {
-        font-size: 2rem;
+      .blog-header h1 {
+        font-size: 1.8rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 리퀴드 무지개 배경 레이어 -->
-  <div class="liquid-background">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="blob blob-4"></div>
-  </div>
+  <!-- 스크롤 시 나타나는 상단 고정 바 -->
+  <header class="sticky-header" id="stickyHeader">
+    <h2>My Dev Blog</h2>
+  </header>
 
-  <!-- 제목 네모 상자 (리퀴드 글래스) -->
-  <div class="title-box glass-card">
-    <h1>부트캠프 일기</h1>
-  </div>
+  <!-- 메인 블로그 제목 및 부제 -->
+  <section class="blog-header" id="mainHeader">
+    <h1>My Dev Blog</h1>
+    <p>개발과 일상을 기록하는 공간입니다.</p>
+  </section>
 
-  <!-- 메인 3단 영역 -->
-  <div class="main-container">
+  <!-- 메인 컨텐츠 영역 -->
+  <div class="container">
     
-    <!-- 좌측: 글래스 즐겁다! 말풍선 -->
-    <div class="bubble-wrapper">
-      <div class="shout-bubble">
-        <span>즐겁다!</span>
-      </div>
-    </div>
+    <!-- 좌측 3/4: 게시글 목록 -->
+    <main class="main-content">
+      <h2>전체글</h2>
+      <br>
 
-    <!-- 중앙: 글래스 카드 (최근 일기 3개 + 카테고리) -->
-    <div class="center-content-box glass-card">
-      <!-- 1. 최근 일기 목록 -->
-      <div>
-        <h2 class="section-title">🔥 최근 일기 (3개)</h2>
-        <ul class="post-list">
-          {% for post in site.posts limit:3 %}
-            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-          {% else %}
-            <li class="empty-notice">등록된 일기가 없습니다.</li>
-          {% endfor %}
+      <article class="post-card">
+        <h3>GitHub Pages로 블로그 만드는 방법</h3>
+        <p>GitHub Pages와 HTML/CSS를 활용하여 나만의 멋진 기술 블로그를 구축해 보세요...</p>
+        <span class="date">2026-08-28</span>
+      </article>
+
+      <article class="post-card">
+        <h3>JavaScript 스크롤 이벤트 감지하기</h3>
+        <p>Intersection Observer API를 사용하면 간편하게 특정 요소가 화면에서 사라지는 순간을 감지할 수 있습니다...</p>
+        <span class="date">2026-08-27</span>
+      </article>
+
+      <article class="post-card">
+        <h3>CSS Flexbox 레이아웃 가이드</h3>
+        <p>Flexbox를 사용하면 3/4, 1/4 나눔 레이아웃을 아주 쉽게 만들 수 있습니다...</p>
+        <span class="date">2026-08-25</span>
+      </article>
+
+      <!-- 임시 스크롤 생성을 위한 더미 데이터 -->
+      <article class="post-card">
+        <h3>샘플 포스트 4</h3>
+        <p>스크롤 테스트를 위한 포스트 내용입니다.</p>
+        <span class="date">2026-08-20</span>
+      </article>
+      <article class="post-card">
+        <h3>샘플 포스트 5</h3>
+        <p>스크롤 테스트를 위한 포스트 내용입니다.</p>
+        <span class="date">2026-08-15</span>
+      </article>
+    </main>
+
+    <!-- 우측 1/4: 카테고리 -->
+    <aside class="sidebar">
+      <div class="category-box">
+        <h3>Category</h3>
+        <ul class="category-list">
+          <!-- 전체글 기본 배치 -->
+          <li><a href="#" class="active">전체글 (5)</a></li>
+          <!-- 추가 카테고리들 -->
+          <li><a href="#">Frontend (2)</a></li>
+          <li><a href="#">Backend (1)</a></li>
+          <li><a href="#">Git / GitHub (1)</a></li>
+          <li><a href="#">Daily (1)</a></li>
         </ul>
       </div>
-
-      <!-- 2. 카테고리 분기 영역 -->
-      <div>
-        <h2 class="section-title">📂 카테고리</h2>
-        <div class="category-container">
-          
-          <!-- 부트캠프 -->
-          <div class="category-card">
-            <h3>💻 부트캠프</h3>
-            <ul class="category-list">
-              {% assign boot_posts = site.categories['부트캠프'] %}
-              {% for post in boot_posts limit:5 %}
-                <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-              {% else %}
-                <li class="empty-notice">글이 없습니다.</li>
-              {% endfor %}
-            </ul>
-          </div>
-
-          <!-- 일상 -->
-          <div class="category-card">
-            <h3>☕ 일상</h3>
-            <ul class="category-list">
-              {% assign daily_posts = site.categories['일상'] %}
-              {% for post in daily_posts limit:5 %}
-                <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-              {% else %}
-                <li class="empty-notice">글이 없습니다.</li>
-              {% endfor %}
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- 우측: 글래스 카드 속 보노보노 -->
-    <div class="bonobono-wrapper">
-      <div class="bono-frame glass-card">
-        <div class="bono-head">
-          <div class="bono-sweat"></div>
-          <div class="bono-eye left"></div>
-          <div class="bono-eye right"></div>
-          <div class="bono-muzzle-wrap">
-            <div class="bono-nose"></div>
-            <div class="bono-cheek left"></div>
-            <div class="bono-cheek right"></div>
-            <div class="bono-mouth"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </aside>
 
   </div>
 
+  <!-- 스크롤 감지 JavaScript -->
+  <script>
+    const mainHeader = document.getElementById('mainHeader');
+    const stickyHeader = document.getElementById('stickyHeader');
+
+    // IntersectionObserver를 사용해 메인 제목이 화면에서 사라지는지 감지
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // entry.isIntersecting이 false면 메인 제목이 화면 밖으로 완전히 나간 것
+        if (!entry.isIntersecting) {
+          stickyHeader.classList.add('active');
+        } else {
+          stickyHeader.classList.remove('active');
+        }
+      },
+      {
+        root: null,
+        threshold: 0 // 헤더가 1px이라도 보이지 않게 되는 순간 작동
+      }
+    );
+
+    // 메인 제목 영역 감시 시작
+    observer.observe(mainHeader);
+  </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 title: "Dongyoon's Dev Blog"
 description: "닿을 수 없는 별을 향해"
 url: "https://your-github-username.github.io" # 본인의 GitHub Pages URL (필요시 변경)
-baseurl: "" # 서브 경로가 있다면 작성 (예: "/my-blog"), 루트 블로그면 "" 빈값
+baseurl: "/my-blog" 
 
 # Markdown 설정
 markdown: kramdown

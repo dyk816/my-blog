@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>내 개발 블로그</title>
+  <title>{{ page.title | default: "Dongyoon's Dev Blog" }}</title>
   <style>
     /* 기본 스타일 리셋 및 설정 */
     * {
@@ -18,7 +18,7 @@
       background-color: #f8f9fa;
     }
 
-    /* 1. 상단 고정 헤더 바 (초기에는 숨김) */
+    /* 1. 상단 고정 헤더 바 (스크롤 시 활성화) */
     .sticky-header {
       position: fixed;
       top: 0;
@@ -33,24 +33,32 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
       z-index: 1000;
       
-      /* 숨김 효과 (위로 살짝 올라가며 투명해짐) */
       opacity: 0;
       transform: translateY(-100%);
       transition: all 0.3s ease-in-out;
     }
 
-    /* 스크롤 시 추가될 active 클래스 */
     .sticky-header.active {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .sticky-header h2 {
+    /* 상단 바 타이틀 클릭 버튼 */
+    .sticky-header .title-btn {
+      background: none;
+      border: none;
       font-size: 1.1rem;
+      font-weight: bold;
       color: #212529;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+    }
+    .sticky-header .title-btn:hover {
+      color: #007bff;
     }
 
-    /* 2. 블로그 타이틀 영역 (헤더) */
+    /* 2. 블로그 타이틀 영역 (정중앙 정렬) */
     .blog-header {
       max-width: 1200px;
       margin: 0 auto;
@@ -58,18 +66,26 @@
       text-align: center;
       background-color: #ffffff;
       border-bottom: 1px solid #e9ecef;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .blog-header h1 {
       font-size: 2.5rem;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       color: #111;
     }
-    .blog-header p {
+    .blog-header blockquote {
       font-size: 1.1rem;
       color: #6c757d;
+      font-style: italic;
+      margin: 0;
     }
+    .blog-header blockquote::before { content: "“"; }
+    .blog-header blockquote::after { content: "”"; }
 
-    /* 3. 메인 컨텐츠 레이아웃 (좌/우 분할) */
+    /* 3. 메인 컨텐츠 레이아웃 (좌 3/4, 우 1/4) */
     .container {
       max-width: 1200px;
       margin: 40px auto;
@@ -78,29 +94,43 @@
       gap: 30px;
     }
 
-    /* 좌측 3/4: 전체글 목록 */
+    /* 좌측 3/4: 메인 본문/글 목록 영역 */
     .main-content {
       flex: 3; /* 75% 비율 */
-    }
-    .post-card {
       background: #ffffff;
-      padding: 24px;
+      padding: 30px;
       border-radius: 8px;
-      margin-bottom: 20px;
       border: 1px solid #e9ecef;
+      min-height: 400px;
     }
-    .post-card h3 {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
+
+    /* 마크다운 본문 스타일링 기본 지정 */
+    .main-content h1, .main-content h2, .main-content h3 {
+      margin-top: 24px;
+      margin-bottom: 12px;
       color: #212529;
     }
-    .post-card p {
+    .main-content p {
+      margin-bottom: 16px;
       color: #495057;
-      margin-bottom: 12px;
     }
-    .post-card .date {
-      font-size: 0.85rem;
-      color: #868e96;
+    .main-content pre {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    .main-content code {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .main-content pre code {
+      background: none;
+      padding: 0;
     }
 
     /* 우측 1/4: 카테고리 사이드바 */
@@ -108,7 +138,7 @@
       flex: 1; /* 25% 비율 */
       height: fit-content;
       position: sticky;
-      top: 80px; /* 상단 바가 생겨도 안 가려지도록 위치 지정 */
+      top: 80px;
     }
     .category-box {
       background: #ffffff;
@@ -122,29 +152,30 @@
       padding-bottom: 8px;
       border-bottom: 2px solid #212529;
     }
-    .category-list {
+    .category-list, .sub-category-list, .sub-sub-category-list {
       list-style: none;
     }
     .category-list li {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .category-list a {
       text-decoration: none;
       color: #495057;
-      display: flex;
-      justify-content: space-content;
+      display: block;
+      padding: 4px 0;
       transition: color 0.2s;
     }
-    .category-list a:hover,
-    .category-list a.active {
+    .category-list a:hover {
       color: #007bff;
       font-weight: bold;
     }
+    .sub-category-list { padding-left: 15px; }
+    .sub-sub-category-list { padding-left: 15px; }
 
-    /* 모바일 대응 (화면이 작아지면 세로로 배치) */
+    /* 모바일 반응형 */
     @media (max-width: 768px) {
       .container {
-        flex-direction: column-reverse; /* 카테고리를 위로 올리려면 column으로 변경 가능 */
+        flex-direction: column-reverse;
       }
       .blog-header h1 {
         font-size: 1.8rem;
@@ -156,52 +187,21 @@
 
   <!-- 스크롤 시 나타나는 상단 고정 바 -->
   <header class="sticky-header" id="stickyHeader">
-    <h2>My Dev Blog</h2>
+    <button class="title-btn" onclick="scrollToTop()">Dongyoon's Dev Blog</button>
   </header>
 
-  <!-- 메인 블로그 제목 및 부제 -->
+  <!-- 메인 타이틀 및 부제 (중앙 정렬) -->
   <section class="blog-header" id="mainHeader">
-    <h1>My Dev Blog</h1>
-    <p>개발과 일상을 기록하는 공간입니다.</p>
+    <h1>Dongyoon's Dev Blog</h1>
+    <blockquote>닿을 수 없는 별을 향해</blockquote>
   </section>
 
-  <!-- 메인 컨텐츠 영역 -->
+  <!-- 메인 컨텐츠 영역 (좌측 3/4 + 우측 1/4) -->
   <div class="container">
     
-    <!-- 좌측 3/4: 게시글 목록 -->
+    <!-- 좌측 3/4: 마크다운 파일 내용이 렌더링될 위치 -->
     <main class="main-content">
-      <h2>전체글</h2>
-      <br>
-
-      <article class="post-card">
-        <h3>GitHub Pages로 블로그 만드는 방법</h3>
-        <p>GitHub Pages와 HTML/CSS를 활용하여 나만의 멋진 기술 블로그를 구축해 보세요...</p>
-        <span class="date">2026-08-28</span>
-      </article>
-
-      <article class="post-card">
-        <h3>JavaScript 스크롤 이벤트 감지하기</h3>
-        <p>Intersection Observer API를 사용하면 간편하게 특정 요소가 화면에서 사라지는 순간을 감지할 수 있습니다...</p>
-        <span class="date">2026-08-27</span>
-      </article>
-
-      <article class="post-card">
-        <h3>CSS Flexbox 레이아웃 가이드</h3>
-        <p>Flexbox를 사용하면 3/4, 1/4 나눔 레이아웃을 아주 쉽게 만들 수 있습니다...</p>
-        <span class="date">2026-08-25</span>
-      </article>
-
-      <!-- 임시 스크롤 생성을 위한 더미 데이터 -->
-      <article class="post-card">
-        <h3>샘플 포스트 4</h3>
-        <p>스크롤 테스트를 위한 포스트 내용입니다.</p>
-        <span class="date">2026-08-20</span>
-      </article>
-      <article class="post-card">
-        <h3>샘플 포스트 5</h3>
-        <p>스크롤 테스트를 위한 포스트 내용입니다.</p>
-        <span class="date">2026-08-15</span>
-      </article>
+      {{ content }}
     </main>
 
     <!-- 우측 1/4: 카테고리 -->
@@ -209,41 +209,53 @@
       <div class="category-box">
         <h3>Category</h3>
         <ul class="category-list">
-          <!-- 전체글 기본 배치 -->
-          <li><a href="#" class="active">전체글 (5)</a></li>
-          <!-- 추가 카테고리들 -->
-          <li><a href="#">Frontend (2)</a></li>
-          <li><a href="#">Backend (1)</a></li>
-          <li><a href="#">Git / GitHub (1)</a></li>
-          <li><a href="#">Daily (1)</a></li>
+          <li>
+            <a href="/">전체글</a>
+            <ul class="sub-category-list">
+              <li>
+                <a href="#">2026 원티드랩 부트캠프</a>
+                <ul class="sub-sub-category-list">
+                  <li><a href="#">- 8월</a></li>
+                  <li><a href="#">- 9월</a></li>
+                  <li><a href="#">- 10월</a></li>
+                  <li><a href="#">- 11월</a></li>
+                  <li><a href="#">- 12월</a></li>
+                  <li><a href="#">- 1월</a></li>
+                  <li><a href="#">- 2월</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </aside>
 
   </div>
 
-  <!-- 스크롤 감지 JavaScript -->
   <script>
+    // 상단 고정 바 클릭 시 최상단 스크롤 이동
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // 스크롤 감지 (IntersectionObserver)
     const mainHeader = document.getElementById('mainHeader');
     const stickyHeader = document.getElementById('stickyHeader');
 
-    // IntersectionObserver를 사용해 메인 제목이 화면에서 사라지는지 감지
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // entry.isIntersecting이 false면 메인 제목이 화면 밖으로 완전히 나간 것
         if (!entry.isIntersecting) {
           stickyHeader.classList.add('active');
         } else {
           stickyHeader.classList.remove('active');
         }
       },
-      {
-        root: null,
-        threshold: 0 // 헤더가 1px이라도 보이지 않게 되는 순간 작동
-      }
+      { root: null, threshold: 0 }
     );
 
-    // 메인 제목 영역 감시 시작
     observer.observe(mainHeader);
   </script>
 </body>

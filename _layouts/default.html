@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+
+    /* 1. 스크롤 상단 고정 바 */
+    .sticky-header {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 60px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      display: flex; align-items: center; padding: 0 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      z-index: 1000;
+      opacity: 0; transform: translateY(-100%);
+      transition: all 0.3s ease-in-out;
+    }
+    .sticky-header.active { opacity: 1; transform: translateY(0); }
+    .sticky-header a {
+      text-decoration: none; font-size: 1.1rem; font-weight: bold; color: #212529;
+    }
+    .sticky-header a:hover { color: #007bff; }
+
+    /* 2. 메인 타이틀 & 부제 (중앙 정렬) */
+    .blog-header {
+      max-width: 1200px; margin: 0 auto;
+      padding: 80px 20px 40px 20px; text-align: center;
+      background-color: #ffffff; border-bottom: 1px solid #e9ecef;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .blog-header h1 a {
+      font-size: 2.5rem; color: #111; text-decoration: none;
+    }
+    .blog-header h1 a:hover { color: #007bff; }
+    .blog-header blockquote {
+      font-size: 1.1rem; color: #6c757d; font-style: italic; margin-top: 8px;
+    }
+    .blog-header blockquote::before { content: "“"; }
+    .blog-header blockquote::after { content: "”"; }
+
+    /* 3. 레이아웃 (좌 3/4, 우 1/4) */
+    .container {
+      max-width: 1200px; margin: 40px auto; padding: 0 20px;
+      display: flex; gap: 30px;
+    }
+    .main-content { flex: 3; }
+
+    /* 4. 카테고리 사이드바 & 드롭아웃 메뉴 */
+    .sidebar { flex: 1; height: fit-content; position: sticky; top: 80px; }
+    .category-box {
+      background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef;
+    }
+    .category-box h3 {
+      font-size: 1.1rem; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #212529;
+    }
+    .category-list, .sub-category-list, .sub-sub-category-list { list-style: none; }
+    .category-list li { margin-bottom: 6px; }
+    .category-item {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .category-list a {
+      text-decoration: none; color: #495057; display: inline-block; padding: 4px 0; transition: color 0.2s;
+    }
+    .category-list a:hover { color: #007bff; font-weight: bold; }
+    .count { font-size: 0.85rem; color: #868e96; font-weight: normal; margin-left: 4px; }
+    
+    /* 드롭아웃(아코디언) 토글 버튼 및 박스 */
+    .toggle-btn {
+      background: none; border: none; cursor: pointer; font-size: 0.8rem; color: #6c757d; padding: 4px;
+      transition: transform 0.2s;
+    }
+    .toggle-btn.open { transform: rotate(180deg); }
+    .sub-category-list { padding-left: 12px; }
+    .sub-sub-category-list {
+      padding-left: 12px;
+      display: none; /* 기본적으로 접혀있음 */
+    }
+    .sub-sub-category-list.show { display: block; } /* 클릭 시 오픈 */
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column-reverse; }
+      .blog-header h1 a { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 스크롤 상단 고정 바 -->
+  <header class="sticky-header" id="stickyHeader">
+    <a href="{{ site.baseurl }}/" onclick="scrollToTop()">{{ site.title }}</a>
+  </header>
+
+  <!-- 메인 블로그 타이틀 영역 (클릭 시 메인 화면 이동) -->
+  <section class="blog-header" id="mainHeader">
+    <h1><a href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
+    <blockquote>{{ site.description }}</blockquote>
+  </section>
+
+  <!-- 컨텐츠 영역 -->
+  <div class="container">
+    <main class="main-content">
+      {{ content }}
+    </main>
+
+    <!-- 우측 1/4 카테고리 (글 개수 표시 및 드롭아웃 기능) -->
+    <aside class="sidebar">
+      <div class="category-box">
+        <h3>Category</h3>
+        <ul class="category-list">
+          <li>
+            <div class="category-item">
+              <a href="{{ site.baseurl }}/">전체글 <span class="count">({{ site.posts | size }})</span></a>
+            </div>
+            
+            <ul class="sub-category-list">
+              <li>
+                <div class="category-item">
+                  <a href="{{ site.baseurl }}/?category=2026 원티드랩 부트캠프">2026 원티드랩 부트캠프 <span class="count">({{ site.categories['2026 원티드랩 부트캠프'] | size | default: 0 }})</span></a>
+                  <button class="toggle-btn" id="dropdownBtn" onclick="toggleDropdown()">▼</button>
+                </div>
+
+                <!-- 하위 월별 드롭아웃 메뉴 -->
+                <ul class="sub-sub-category-list" id="dropdownMenu">
+                  <li><a href="{{ site.baseurl }}/?category=8월">- 8월 <span class="count">({{ site.categories['8월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=9월">- 9월 <span class="count">({{ site.categories['9월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=10월">- 10월 <span class="count">({{ site.categories['10월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=11월">- 11월 <span class="count">({{ site.categories['11월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=12월">- 12월 <span class="count">({{ site.categories['12월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=1월">- 1월 <span class="count">({{ site.categories['1월'] | size | default: 0 }})</span></a></li>
+                  <li><a href="{{ site.baseurl }}/?category=2월">- 2월 <span class="count">({{ site.categories['2월'] | size | default: 0 }})</span></a></li>
+                </ul>
+
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // 카테고리 드롭아웃 토글
+    function toggleDropdown() {
+      const menu = document.getElementById('dropdownMenu');
+      const btn = document.getElementById('dropdownBtn');
+      menu.classList.toggle('show');
+      btn.classList.toggle('open');
+    }
+
+    // 상단 제목 클릭 시 부드럽게 최상단 이동
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 스크롤 감지 인터섹션 옵저버 (상단바 나타남/숨김)
+    const mainHeader = document.getElementById('mainHeader');
+    const stickyHeader = document.getElementById('stickyHeader');
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          stickyHeader.classList.add('active');
+        } else {
+          stickyHeader.classList.remove('active');
+        }
+      },
+      { root: null, threshold: 0 }
+    );
+    observer.observe(mainHeader);
+  </script>
+</body>
+</html>

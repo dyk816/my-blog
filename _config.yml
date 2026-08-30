@@ -1,17 +1,3 @@
-# 블로그 기본 정보
-title: "Dongyoon's Dev Blog"
-description: "닿을 수 없는 별을 향해"
-url: "https://your-github-username.github.io" # 본인의 GitHub Pages URL (필요시 변경)
-baseurl: "/my-blog" 
-
-# Markdown 설정
-markdown: kramdown
-highlighter: rouge
-
-# 빌드 시 포함/제외 설정
-permalink: /posts/:title/ # 게시글 URL 형태 지정
-
-# 플러그인 설정 (GitHub Pages 기본 지원 플러그인)
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
+title: 학습 노트
+remote_theme: samarsault/plainwhite-jekyll
+baseurl: "/my-blog"

@@ -1,0 +1,20 @@
+# Bundler cache
+.bundle
+vendor
+Gemfile.lock
+
+# Jekyll cache
+.jekyll-cache
+.jekyll-metadata
+_site
+
+# RubyGems
+*.gem
+
+# IDE configurations
+.idea
+
+# Misc
+*~
+.DS_Store
+Thumbs.db

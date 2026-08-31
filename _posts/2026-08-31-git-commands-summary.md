@@ -2,6 +2,7 @@
 layout: post
 title: "이번 주에 배운 Git 명령어 정리"
 date: 2026-08-31
+categories: [원티드랩 부트캠프, 8월]
 ---
 
 안녕하세요! 이번 주에 Git과 GitHub를 처음 배운 내용을 정리해 볼게요.

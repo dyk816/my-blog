@@ -3,6 +3,7 @@ layout: post
 title: "이번 주에 배운 클로드(Claude) 활용법 정리"
 date: 2026-08-31
 categories: [원티드랩 부트캠프, 8월]
+mermaid: true
 ---
 
 안녕하세요! 이번 주에는 생성형 AI인 **클로드(Claude)**를 실제로 써보는 법을 배웠어요.

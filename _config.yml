@@ -1,8 +1,13 @@
 title: 학습 노트
 remote_theme: sylhare/Type-on-Strap
 baseurl: "/my-blog"
+header_text: 학습 노트
 
 plugins:
   - jekyll-paginate
 paginate: 5
 paginate_path: "/blog/page:num"
+
+exclude:
+  - CLAUDE.md
+  - markdown-test.md

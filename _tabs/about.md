@@ -20,7 +20,7 @@ order: 4
     height: 100%;
     width: 0%;
     border-radius: 5px;
-    background-color: #6f42c1;
+    background-color: #a8a9aa;
     transition: width 0.3s ease;
   }
   #bootcamp-progress-text {

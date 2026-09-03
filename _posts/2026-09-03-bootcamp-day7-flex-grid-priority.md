@@ -3,7 +3,6 @@ layout: post
 title: "선택자 우선순위, Flexbox, Grid, CDN으로 CSS 가져오기 (DAY 7)"
 date: 2026-09-03
 categories: [원티드랩 부트캠프, 9월]
-tags: [css, flexbox, grid, tailwind]
 mermaid: true
 ---
 

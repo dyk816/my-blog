@@ -1,0 +1,71 @@
+<!-- Easter egg: Konami code triggers a rain effect on the home page -->
+
+<style>
+  .konami-rain {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .konami-rain span {
+    position: absolute;
+    top: -10vh;
+    font-size: 1.5rem;
+    animation-name: konami-fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes konami-fall {
+    to {
+      transform: translateY(120vh);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const konamiCode = [
+      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+      'KeyB', 'KeyA'
+    ];
+    let position = 0;
+
+    function startRain() {
+      const rain = document.createElement('div');
+      rain.className = 'konami-rain';
+      document.body.appendChild(rain);
+
+      const dropCount = 60;
+
+      for (let i = 0; i < dropCount; i += 1) {
+        const drop = document.createElement('span');
+        drop.textContent = '💧';
+        drop.style.left = `${Math.random() * 100}vw`;
+        drop.style.animationDuration = `${2 + Math.random() * 2}s`;
+        drop.style.animationDelay = `${Math.random() * 1.5}s`;
+        rain.appendChild(drop);
+      }
+
+      setTimeout(() => {
+        rain.remove();
+      }, 5000);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.code === konamiCode[position]) {
+        position += 1;
+      } else {
+        position = event.code === konamiCode[0] ? 1 : 0;
+      }
+
+      if (position === konamiCode.length) {
+        position = 0;
+        startRain();
+      }
+    });
+  });
+</script>

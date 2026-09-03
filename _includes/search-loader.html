@@ -1,0 +1,88 @@
+<!--
+  Custom search loader with title / content / title+content scope switch.
+  Based on Chirpy's default search-loader.html (which uses Simple-Jekyll-Search),
+  but Simple-Jekyll-Search has no option to limit which fields are matched,
+  so this replaces it with a small custom matcher over the same search.json data.
+-->
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const resultsContainer = document.getElementById('search-results');
+    const scopeButtons = document.querySelectorAll('#search-scope button');
+    const noResultsText = {{ site.data.locales[include.lang].search.no_results | jsonify }};
+
+    let posts = [];
+    let scope = 'both'; /* 'title' | 'content' | 'both' */
+
+    fetch('{{ '/assets/js/data/search.json' | relative_url }}')
+      .then((response) => response.json())
+      .then((data) => {
+        posts = data;
+      });
+
+    function matches(post, query) {
+      const title = (post.title || '').toLowerCase();
+      const content = (post.content || '').toLowerCase();
+
+      if (scope === 'title') {
+        return title.includes(query);
+      }
+      if (scope === 'content') {
+        return content.includes(query);
+      }
+      return title.includes(query) || content.includes(query);
+    }
+
+    function render(query) {
+      if (query === '') {
+        resultsContainer.innerHTML = '';
+        return;
+      }
+
+      const matched = posts.filter((post) => matches(post, query));
+
+      if (matched.length === 0) {
+        resultsContainer.innerHTML = `<p class="mt-5">${noResultsText}</p>`;
+        return;
+      }
+
+      resultsContainer.innerHTML = matched
+        .map((post) => {
+          const categories = post.categories
+            ? `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${post.categories}</div>`
+            : '';
+          const tags = post.tags
+            ? `<div><i class="fa fa-tag fa-fw"></i>${post.tags}</div>`
+            : '';
+
+          return `
+            <article class="px-1 px-sm-2 px-lg-4 px-xl-0">
+              <header>
+                <h2><a href="${post.url}">${post.title}</a></h2>
+                <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
+                  ${categories}
+                  ${tags}
+                </div>
+              </header>
+              <p>${post.content}</p>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    searchInput.addEventListener('input', () => {
+      render(searchInput.value.trim().toLowerCase());
+    });
+
+    scopeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        scopeButtons.forEach((b) => b.classList.remove('active'));
+        button.classList.add('active');
+        scope = button.dataset.scope;
+        render(searchInput.value.trim().toLowerCase());
+      });
+    });
+  });
+</script>

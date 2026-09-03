@@ -1,0 +1,15 @@
+<!-- The Search results -->
+
+<div id="search-result-wrapper" class="d-flex justify-content-center d-none">
+  <div class="col-11 content">
+    <div id="search-scope" class="btn-group btn-group-sm mb-3" role="group" aria-label="Search scope">
+      <button type="button" class="btn btn-outline-secondary" data-scope="title">제목</button>
+      <button type="button" class="btn btn-outline-secondary" data-scope="content">내용</button>
+      <button type="button" class="btn btn-outline-secondary active" data-scope="both">제목+내용</button>
+    </div>
+    <div id="search-hints">
+      {% include_cached trending-tags.html lang=include.lang %}
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>

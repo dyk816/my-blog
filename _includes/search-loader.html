@@ -21,17 +21,22 @@
         posts = data;
       });
 
+    function normalize(text) {
+      return (text || '').toLowerCase().replace(/\s+/g, '');
+    }
+
     function matches(post, query) {
-      const title = (post.title || '').toLowerCase();
-      const content = (post.content || '').toLowerCase();
+      const title = normalize(post.title);
+      const content = normalize(post.content);
+      const q = normalize(query);
 
       if (scope === 'title') {
-        return title.includes(query);
+        return title.includes(q);
       }
       if (scope === 'content') {
-        return content.includes(query);
+        return content.includes(q);
       }
-      return title.includes(query) || content.includes(query);
+      return title.includes(q) || content.includes(q);
     }
 
     function render(query) {

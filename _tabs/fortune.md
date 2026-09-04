@@ -82,12 +82,11 @@ order: 5
       <div class="card-meaning" id="card-meaning"></div>
     </div>
     <div class="date-info" id="date-info"></div>
-    <button id="draw-button" disabled>오늘의 운세는 이미 정해졌습니다</button>
     <div class="reset-note">자정이 지나면 새로운 운세를 볼 수 있습니다</div>
   </div>
   
   <div id="initial-container">
-    <button id="draw-button">오늘의 운세 보기</button>
+    <button id="fortune-draw-btn">오늘의 운세 보기</button>
   </div>
 </div>
 
@@ -126,7 +125,6 @@ order: 5
     function displayCard(card, savedDate) {
       const resultContainer = document.getElementById('result-container');
       const initialContainer = document.getElementById('initial-container');
-      const drawButton = document.getElementById('draw-button');
       
       document.getElementById('card-emoji').textContent = card.emoji;
       document.getElementById('card-name').textContent = card.name;
@@ -135,7 +133,6 @@ order: 5
       
       resultContainer.style.display = 'block';
       initialContainer.style.display = 'none';
-      drawButton.disabled = true;
     }
 
     function drawCard() {
@@ -155,7 +152,10 @@ order: 5
       }
     }
 
-    document.getElementById('draw-button').addEventListener('click', drawCard);
+    const drawBtn = document.getElementById('fortune-draw-btn');
+    if (drawBtn) {
+      drawBtn.addEventListener('click', drawCard);
+    }
 
     const key = getTodayKey();
     if (localStorage.getItem(key)) {

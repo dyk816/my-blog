@@ -234,14 +234,33 @@ order: 5
       return 'fortune_' + kst.toISOString().slice(0, 10);
     }
 
+    function getShuffledCards() {
+      const key = getTodayKey() + '_order';
+      let order = localStorage.getItem(key);
+      
+      if (!order) {
+        order = Array.from({length: TAROT_CARDS.length}, (_, i) => i);
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+        localStorage.setItem(key, JSON.stringify(order));
+      } else {
+        order = JSON.parse(order);
+      }
+      
+      return order.map(i => TAROT_CARDS[i]);
+    }
+    
     function renderCardSelection() {
       const container = document.getElementById('card-selection');
       container.innerHTML = '';
       
-      TAROT_CARDS.forEach((card, index) => {
+      const shuffledCards = getShuffledCards();
+      shuffledCards.forEach((card, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card-back';
-        cardDiv.dataset.index = index;
+        cardDiv.dataset.cardName = card.name;
         cardDiv.title = '카드를 선택하세요';
         cardDiv.addEventListener('click', selectCard);
         container.appendChild(cardDiv);
@@ -256,15 +275,16 @@ order: 5
       selectedDiv.classList.add('selected');
       
       setTimeout(() => {
-        const randomCard = TAROT_CARDS[Math.floor(Math.random() * TAROT_CARDS.length)];
+        const selectedCardName = selectedDiv.dataset.cardName;
+        const selectedCard = TAROT_CARDS.find(c => c.name === selectedCardName);
         const isReversed = Math.random() < 0.5;
         const kst = new Date(Date.now() + 9 * 60 * 60 * 1000);
         const dateStr = kst.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
         
         const key = getTodayKey();
-        localStorage.setItem(key, JSON.stringify({ card: randomCard, date: dateStr, reversed: isReversed }));
+        localStorage.setItem(key, JSON.stringify({ card: selectedCard, date: dateStr, reversed: isReversed }));
         
-        displayCard(randomCard, dateStr, isReversed);
+        displayCard(selectedCard, dateStr, isReversed);
       }, 600);
     }
 

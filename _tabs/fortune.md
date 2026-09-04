@@ -92,7 +92,13 @@ order: 5
   }
   
   .card-emoji {
-    display: none;
+    font-size: 5rem;
+    margin: 0.5rem 0;
+  }
+  
+  .card-emoji.reversed {
+    transform: rotate(180deg);
+    display: inline-block;
   }
   
   .card-name {

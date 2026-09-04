@@ -3,7 +3,6 @@ layout: post
 title: "프롬프트 엔지니어링과 Claude Code로 게임·웹사이트 만들어보기"
 date: 2026-09-04 12:00:00 +0900
 categories: [Frontend, AI]
-tags: [prompt-engineering, claude-code, web-development, agent]
 mermaid: true
 ---
 

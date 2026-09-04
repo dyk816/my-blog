@@ -19,9 +19,14 @@ order: 5
     flex-wrap: wrap;
   }
   
+  #card-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+  }
+  
   .card-back {
-    width: 100px;
-    height: 140px;
+    aspect-ratio: 2/3;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: 2px solid #5a67d8;
     border-radius: 8px;
@@ -29,11 +34,16 @@ order: 5
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+    color: white;
     transition: all 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
     perspective: 1000px;
+    line-height: 1.2;
   }
   
   .card-back:hover {
@@ -79,13 +89,7 @@ order: 5
   }
   
   .card-emoji {
-    font-size: 5rem;
-    margin: 0.5rem 0;
-  }
-  
-  .card-emoji.reversed {
-    transform: rotate(180deg);
-    display: inline-block;
+    display: none;
   }
   
   .card-name {
@@ -231,14 +235,14 @@ order: 5
       const container = document.getElementById('card-selection');
       container.innerHTML = '';
       
-      for (let i = 0; i < 5; i++) {
+      TAROT_CARDS.forEach((card, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card-back';
-        cardDiv.textContent = '🎴';
-        cardDiv.dataset.index = i;
+        cardDiv.textContent = card.name;
+        cardDiv.dataset.index = index;
         cardDiv.addEventListener('click', selectCard);
         container.appendChild(cardDiv);
-      }
+      });
     }
 
     function selectCard(e) {

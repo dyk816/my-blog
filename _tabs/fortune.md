@@ -20,13 +20,19 @@ order: 5
   }
   
   #card-selection {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: -30px;
+    margin: 3rem 1rem;
+    flex-wrap: wrap;
+    min-height: 250px;
+    perspective: 1200px;
   }
   
   .card-back {
-    aspect-ratio: 2/3;
+    width: 80px;
+    height: 120px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: 2px solid #5a67d8;
     border-radius: 8px;
@@ -34,21 +40,18 @@ order: 5
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: center;
-    padding: 0.5rem;
     color: white;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     position: relative;
-    perspective: 1000px;
-    line-height: 1.2;
+    margin: 0 -20px;
+    z-index: 1;
   }
   
   .card-back:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    transform: translateY(-40px) scale(1.1);
+    box-shadow: 0 12px 24px rgba(102, 126, 234, 0.5);
+    z-index: 100;
   }
   
   .card-back.selected {
@@ -238,8 +241,8 @@ order: 5
       TAROT_CARDS.forEach((card, index) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'card-back';
-        cardDiv.textContent = card.name;
         cardDiv.dataset.index = index;
+        cardDiv.title = '카드를 선택하세요';
         cardDiv.addEventListener('click', selectCard);
         container.appendChild(cardDiv);
       });

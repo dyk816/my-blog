@@ -2,7 +2,7 @@
 layout: post
 title: "프롬프트 엔지니어링과 Claude Code로 게임·웹사이트 만들어보기 (DAY 8)"
 date: 2026-09-04 12:00:00 +0900
-categories: [Frontend, AI]
+categories: [원티드랩 부트캠프, 9월]
 mermaid: true
 ---
 
